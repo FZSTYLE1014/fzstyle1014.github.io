@@ -169,35 +169,35 @@
 							}
 
 							error.innerHTML = ""; // clear previous error messages
-							error1.innerHTML = "";
-							error2.innerHTML = "";
+							
 							if (no_kad_pengenalan.length != 12) {
 								error1.innerHTML += "<p>No. kad pengenalan baru is not valid.</p>";
 								return false;
 							}
-
+							error1.innerHTML = "";
+							
 							if (password.length < 8 || password.length > 20) {
 								error2.innerHTML += "<p>Password must be between 8 to 20 characters.</p>";
 								return false;
 							}
-
+							error2.innerHTML = "";
 							return true; // return true if validation passed
 						}
 					</script>
 					<div id="error"></div> <!-- error message section -->
 					<form action="login.php" method="POST">
 						<p>No Kad pengenalan</p>
-						<input type="number" class="form-control" placeholder="Nombor Kad Pengenalan"
+						<input type="number" class="form-control" placeholder="98010110****"
 							name="no_kad_pengenalan_baru" pattern="[0-9]{12}" required />
 						<br>
 						<div id="error1"></div>
 
 						<p>Kata Laluan</p>
-						<input type="password" class="form-control" id="test1" placeholder="Kata Laluan" name="password"
+						<input type="password" class="form-control" id="test1" placeholder="******" name="password"
 							required minlength="6" maxlength="20" />
 						<div id="error2"></div>
 						<br>
-						<input id="test2" type="checkbox" />Show password
+						<input id="test2" type="checkbox" />  Show password
 						<br>
 						<br>
 

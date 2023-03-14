@@ -122,6 +122,15 @@
 						height: 80px;
 
 					}
+					#error-message,
+					#error1-message,
+					#error2-message,
+					#error3-message {
+						color: red;
+						font-size: 14px;
+						margin-top: 5px;
+						margin-left: 2px;
+					}
 				</style>
 
 
@@ -132,38 +141,102 @@
 						<img src="assets\e.png" width="120" height="60" />
 						<h5><br />Daftar Akaun Pengguna</h5>
 					</div>
+
 					<br />
 					<form id="register" action="register.php" method="POST">
 						<label> Nama Penuh:</label>
-						<input type="text" class="form-control" placeholder="Nama Penuh" name="nama_penuh"
-							autofill="off" />
+						<input type="text" class="form-control" placeholder="(Seperti Kad Pengenalan)" name="nama_penuh"
+							autofill="off" required />
+						<!-- Error message container -->
+						<div id="error-message"></div>
 						<br>
-						<label> Kad Pengenalan:<small class="form-text text-muted">Format: Tanpa Sengkang
-							</small></label>
-						<input type="number" class="form-control" placeholder="NO IC" name="no_kad_pengenalan_baru"
-							autofill="off" />
+						<label> Kad Pengenalan: <small>(Tanpa Sengkang)</small></label>
+						<input type="number" class="form-control" placeholder="99010110****"
+							name="no_kad_pengenalan_baru" autofill="off" required />
+						<!-- Error message container -->
+						<div id="error1-message"></div>
 						<br>
 						<!--<label> Tarikh Lahir:</label>
-						<input type="date" class="form-control" placeholder="tarikh lahir" name="tarikh_lahir"
-							autofill="off" />
-						<br>-->
-						<label> Email:</label>
-						<input type="email" class="form-control" placeholder="Emel" name="email" autofill="off" />
+					  <input type="date" class="form-control" placeholder="tarikh lahir" name="tarikh_lahir"
+						autofill="off" />
+					  <br>-->
+						<label> E-Mail:</label>
+						<input type="email" class="form-control" placeholder="user@gmail.com" name="email"
+							autofill="off" required />
+							<!-- Error message container -->
+						<div id="error2-message"></div>
 						<br>
-						<label> Password:</label>
-						<input type="password" class="form-control" id="test1" placeholder="Kata Laluan" name="password"
-							autofill="off" />
+						
+						<label> Kata Laluan:</label>
+						<input type="password" class="form-control" id="test1" placeholder="P@ssW0rD" name="password"
+							autofill="off" minlength="6" required />
+						<!-- Error message container -->
+						<div id="error3-message"></div>
 						<br>
+
 						<input id="test2" type="checkbox" /> Show password
 						<br>
 						<br>
 						<div class="col-md-12 text-center">
-							<button class="btn btn-block btn-success" type="submit" name="submit">
+							<button class="btn btn-block btn-success" type="submit" name="submit"
+								onclick="validateForm()">
 								<span class="fa fa-send"></span> Daftar Akaun
 							</button>
 						</div>
 						<br />
 					</form>
+<script>
+
+					function validateForm() {
+					  const form = document.getElementById("register");
+					  const nama_penuh = form.querySelector('input[name="nama_penuh"]');
+					  const no_kad_pengenalan_baru = form.querySelector('input[name="no_kad_pengenalan_baru"]');
+					  const email = form.querySelector('input[name="email"]');
+					  const password = form.querySelector('input[name="password"]');
+					  
+					  // clear previous error messages
+					  const errorIds = ['error-message', 'error1-message', 'error2-message', 'error3-message']; // add all error message IDs here
+					  errorIds.forEach((id) => {
+						const errorMsg = document.getElementById(id);
+						if (errorMsg) {
+						  errorMsg.innerHTML = '';
+						}
+					  });
+					  ;
+					  
+					  if (nama_penuh.value.trim() === "") {
+						document.getElementById("error-message").innerHTML = "Sila isi nama penuh anda.";
+						nama_penuh.focus();
+						return false;
+					  }
+					
+					  if (no_kad_pengenalan_baru.value.length !== 12) {
+						document.getElementById("error1-message").innerHTML = "Sila masukkan kad pengenalan yang sah.";
+						no_kad_pengenalan_baru.focus();
+						return false;
+					  }
+					
+					  if (!email.checkValidity()) {
+						document.getElementById("error2-message").innerHTML = "Sila masukkan alamat e-mel yang sah.";
+						email.focus();
+						return false;
+					  }
+					  
+					  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
+					  if (!passwordRegex.test(password.value)) {
+						document.getElementById("error3-message").innerHTML =
+						  "Kata laluan mesti mengandungi sekurang-kurangnya 6 aksara, satu huruf besar, satu huruf kecil, satu nombor dan satu karakter istimewa (@$!%*?&).";
+						password.focus();
+						return false;
+					  }
+					  
+					  return true;
+					}
+					</script>
+
+
+
+
 					<div class="col-md-12 text-center">
 						<a href="login.php" class="">Log Masuk Pengguna</a>
 					</div>
@@ -172,54 +245,7 @@
 			</div>
 		</div>
 	</div>
-	<script>
-		const form = document.getElementById('register');
-		const nameInput = document.getElementsByName('nama_penuh')[0];
-		const icInput = document.getElementsByName('no_kad_pengenalan_baru')[0];
-		const emailInput = document.getElementsByName('email')[0];
-		const passwordInput = document.getElementsByName('password')[0];
 
-		array.forEach(element => {
-			form.addEventListener('submit', function (event) {
-				event.preventDefault();
-
-				if (!validateName(nameInput.value)) {
-					alert('Please enter a valid name.');
-					return;
-				}
-
-				if (!validateIC(icInput.value)) {
-					alert('Please enter a valid IC number.');
-					return;
-				}
-
-				if (!validateEmail(emailInput.value)) {
-					alert('Please enter a valid email address.');
-					return;
-				}
-
-
-
-				// Submit the form if all inputs are valid
-				form.submit();
-			});
-		});
-
-		function validateName(name) {
-			const regex = /^[a-zA-Z\s]{3,}$/;
-			return regex.test(name);
-		}
-
-		function validateIC(ic) {
-			const regex = /^[0-9]{12}$/;
-			return regex.test(ic);
-		}
-
-		function validateEmail(email) {
-			const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-			return regex.test(email);
-		}
-	</script>
 	<?php
 	}
 	?>
@@ -235,7 +261,13 @@
 	<script src="assets/js/main.js"></script>
 
 
-
+	<style>
+		.form-control::placeholder {
+			font-size: 12px;
+			line-height: normal;
+			color: #999;
+		}
+	</style>
 </body>
 
 </html>
