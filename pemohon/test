@@ -1,0 +1,69 @@
+<?php
+$query2 = "SELECT * FROM `maklumat_peribadi` WHERE id_user = $session ";
+$result2 = mysqli_query($conn, $query2);
+
+$row2 = mysqli_fetch_array($result2);
+
+$encoded_text = $row2["gambar"];
+$decoded_text = base64_decode($encoded_text);
+
+if (!$decoded_text) {
+    echo "Error: Image could not be decoded.";
+    exit;
+}
+
+$file_type = getimagesizefromstring($decoded_text);
+
+// Output the BLOB data as the appropriate file type
+switch ($file_type[2]) {
+    case IMAGETYPE_JPEG:
+        header("Content-type: image/jpeg");
+        break;
+    case IMAGETYPE_PNG:
+        header("Content-type: image/png");
+        break;
+    case IMAGETYPE_GIF:
+        header("Content-type: image/gif");
+        break;
+    default:
+        // If the file type is not recognized, output an error message
+        echo "Error: Unsupported image type.";
+        exit;
+}
+
+echo $decoded_text;
+?>
+
+<form class="col-sm-12 shadow-lg p-3  mb-12 bg-white rounded" enctype="multipart/form-data" action="maklumat_peribadi.php" method="POST">
+    <div class="row">
+        <div class="uploadGambar">
+            <p style="text-align: center;">
+                <img src="data:<?php echo $file_type['mime']; ?>;base64,<?php echo base64_encode($decoded_text); ?>" alt="User" style="width:150px; height:170px; padding: 10px;" id="profile-img-tag">
+            </p>
+            <br>
+            <p style="text-align: center; font-size: 10px;">File must be in JPEG (.jpg or .jpeg) format.</p>
+            <p style="text-align: center; font-size: 10px;">File size must not exceed 20KB.</p>
+            <br>
+            <div style="text-align: center;">
+                <input type="file" id="profile-img" name="gambar_pemohon" onchange="readURL(this)">
+            </div>
+        </div>
+
+        <script>
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                let reader = new FileReader();
+
+                reader.onload = function(e) {
+                    document.querySelector('#profile-img-tag').setAttribute('src', e.target.result);
+
+                    let file = input.files[0];
+                    let formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('move_file.php', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        console.log

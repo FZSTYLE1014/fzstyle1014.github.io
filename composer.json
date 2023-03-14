@@ -1,0 +1,10 @@
+{
+  "name": "nb2/eaic-job",
+  "description": "ekerjaya",
+  "autoload": {
+    "psr-4": {
+      "Nb2\\EaicJob\\": "src/"
+    }
+  },
+  "require": {}
+}
